@@ -13,4 +13,15 @@ async function testPG() {
   return res.rows[0].message;
 }
 
-module.exports = { testPG };
+async function getInactiveNodes() {
+  //   const client = new Client();
+  const fs = require("fs");
+  const file = fs.readFileSync("./inactiveNodes_Script2.sql", "utf8");
+  await client.connect();
+  const res = await client.query(file);
+
+  await client.end();
+  return res.rows;
+}
+
+module.exports = { testPG, getInactiveNodes };
