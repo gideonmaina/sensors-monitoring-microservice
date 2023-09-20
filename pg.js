@@ -1,9 +1,10 @@
 require("dotenv").config();
+const fs = require("fs");
 const { Client } = require("pg");
-const client = new Client(process.env.POSTGRES_URL);
 
 async function testPG() {
   //   const client = new Client();
+  const client = new Client(process.env.POSTGRES_URL);
   await client.connect();
   const res = await client.query("SELECT $1::text as message", [
     "Postgres is available",
@@ -14,8 +15,7 @@ async function testPG() {
 }
 
 async function getInactiveNodes() {
-  //   const client = new Client();
-  const fs = require("fs");
+  const client = new Client(process.env.POSTGRES_URL);
   const file = fs.readFileSync("./inactiveNodes_Script2.sql", "utf8");
   await client.connect();
   const res = await client.query(file);
@@ -24,4 +24,14 @@ async function getInactiveNodes() {
   return res.rows;
 }
 
-module.exports = { testPG, getInactiveNodes };
+async function getActiveNodes() {
+  const client = new Client(process.env.POSTGRES_URL);
+  const file = fs.readFileSync("./activeNodes_Script1.sql", "utf8");
+  await client.connect();
+  const res = await client.query(file);
+
+  await client.end();
+  return res.rows;
+}
+
+module.exports = { testPG, getInactiveNodes, getActiveNodes };
