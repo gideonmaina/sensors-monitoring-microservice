@@ -16,7 +16,7 @@ async function testPG() {
 
 async function getInactiveNodes() {
   const client = new Client(process.env.POSTGRES_URL);
-  const file = fs.readFileSync("./inactiveNodes_Script2.sql", "utf8");
+  const file = fs.readFileSync("./InactiveNodes_Script2.sql", "utf8");
   await client.connect();
   const res = await client.query(file);
 
@@ -26,7 +26,7 @@ async function getInactiveNodes() {
 
 async function getActiveNodes() {
   const client = new Client(process.env.POSTGRES_URL);
-  const file = fs.readFileSync("./activeNodes_Script1.sql", "utf8");
+  const file = fs.readFileSync("./ActiveNodes_Script1.sql", "utf8");
   await client.connect();
   const res = await client.query(file);
 
