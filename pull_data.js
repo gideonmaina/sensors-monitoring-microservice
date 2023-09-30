@@ -4,7 +4,7 @@ const cron = require("node-cron");
 const pull_and_save = async () => {
   fs.writeFile(
     "data/active_nodes.json",
-    await JSON.stringify(await getActiveNodes()),
+    JSON.stringify(await getActiveNodes()),
     { flag: "w+" },
     (err) => {
       if (err) console.log(err);
@@ -13,7 +13,7 @@ const pull_and_save = async () => {
 
   fs.writeFile(
     "data/inactive_nodes.json",
-    await JSON.stringify(await getInactiveNodes()),
+    JSON.stringify(await getInactiveNodes()),
     { flag: "w+" },
     (err) => {
       if (err) console.log(err);
@@ -21,6 +21,7 @@ const pull_and_save = async () => {
   );
 };
 
-cron.schedule("* */10 * * * *", function () {
+// call function(s) every 10 minutes
+cron.schedule("*/10 * * * *", function () {
   pull_and_save();
 });
