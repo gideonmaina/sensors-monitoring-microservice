@@ -33,11 +33,36 @@ app.get("/firmware-update", function (req, res, next) {
       "x-MD5": md5.sync(filePath),
     },
   };
-  res.sendFile(filePath, options, function (err) {
+  res.sendFile(filexPath, options, function (err) {
     if (err) {
       next(err);
     } else {
       console.log("Sent:", filePath);
+    }
+  });
+});
+
+app.get("/firmware-update/checksum", (req, res) => {
+  let filePath = path.join(__dirname, "/firmwares/checksum.txt");
+  // if (!fs.existsSync(filePath)) {
+  //   console.log("Checksum file does not exist");
+  //   res.send("null");
+  // }
+
+  fs.access(filePath, fs.constants.F_OK, (err) => {
+    if (err) {
+      console.log("Checksum file does not exist");
+      res.send("Checksum file does not exists");
+      return;
+    }
+
+    try {
+      const data = fs.readFileSync(filePath, "utf8");
+      console.log(data);
+      res.send(data);
+    } catch (err) {
+      console.error(err);
+      res.send(err);
     }
   });
 });
