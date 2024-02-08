@@ -5,7 +5,8 @@ const path = require("path");
 const { testPG, getInactiveNodes, getActiveNodes } = require("./pg");
 const fs = require("fs");
 const md5 = require("md5-file");
-
+let cors = require("cors");
+app.use(cors());
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
@@ -22,9 +23,12 @@ app.get("/active-nodes", async (req, res) => {
   res.send(activeNodes);
 });
 
-app.get("/firmware-update", function (req, res, next) {
+app.get("/firmware-update/latest", function (req, res, next) {
   //console.log(req.headers);
-  let filePath = path.join(__dirname, "/firmwares/ota-test.bin");
+  let filePath = path.join(
+    __dirname,
+    "/firmwares/versions/latest/latest_firmware.bin"
+  );
 
   //console.log(filePath)
   let options = {
@@ -42,8 +46,11 @@ app.get("/firmware-update", function (req, res, next) {
   });
 });
 
-app.get("/firmware-update/checksum", (req, res) => {
-  let filePath = path.join(__dirname, "firmwares/checksum.txt");
+app.get("/firmware-update/latest/checksum", (req, res) => {
+  let filePath = path.join(
+    __dirname,
+    "firmwares/versions/latest/latest_firmware_checksum.txt"
+  );
   fs.access(filePath, fs.constants.F_OK, (err) => {
     if (err) {
       console.log("Checksum file does not exist");
